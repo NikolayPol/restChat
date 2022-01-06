@@ -8,3 +8,6 @@ Spring REST API.
 RESTful-приложение с использованием Spring REST API.
 Приложение реализует чат с комнатами по стандарту REST API.
 Проект использует базу данных PostgreSQL.
+
+#### Таблицы базы данных.
+![img.png](img.png)
