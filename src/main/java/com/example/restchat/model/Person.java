@@ -10,7 +10,7 @@ import java.util.*;
  * Класс Person - модель пользователя
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.01.2022
+ * @version 1.1 06.01.2022
  */
 @Entity
 @Table(name = "person")
@@ -44,6 +44,11 @@ public class Person {
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "room_id"))
     private List<Room> rooms = new ArrayList<>();
+
+    public Person(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 
     public void addRoom(Room room) {
         rooms.add(room);
