@@ -3,6 +3,8 @@ package com.example.restchat.control;
 import com.example.restchat.model.Message;
 import com.example.restchat.service.MessageService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +27,12 @@ public class MessageController {
     }
 
     @GetMapping("/{id}")
-    public Message findById(@PathVariable Long id) {
-        return messageService.findById(id).get();
-
+    public ResponseEntity<Message> findById(@PathVariable Long id) {
+        var message = messageService.findById(id);
+        return new ResponseEntity<>(
+                message.orElse(new Message()),
+                message.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND
+        );
     }
 
     @PostMapping()

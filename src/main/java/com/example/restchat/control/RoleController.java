@@ -3,6 +3,8 @@ package com.example.restchat.control;
 import com.example.restchat.model.Role;
 import com.example.restchat.service.RoleService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,12 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    public Role findById(@PathVariable int id) {
-        return roleService.findById(id).get();
+    public ResponseEntity<Role> findById(@PathVariable int id) {
+        var role =  roleService.findById(id);
+        return new ResponseEntity<>(
+                role.orElse(new Role()),
+                role.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND
+        );
     }
 
     @PostMapping()
