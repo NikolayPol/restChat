@@ -28,7 +28,7 @@ public class RoomController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Room> findById(@PathVariable Long id) {
-        var room =  roomService.findById(id);
+        var room = roomService.findById(id);
         return new ResponseEntity<>(
                 room.orElse(new Room()),
                 room.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND
@@ -36,17 +36,19 @@ public class RoomController {
     }
 
     @PostMapping()
-    public Room create(@RequestBody Room room) {
-        return roomService.save(room);
+    public ResponseEntity<?> create(@RequestBody Room room) {
+        roomService.save(room);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping()
-    public Room update(@RequestBody Room room) {
-        return roomService.save(room);
+    public ResponseEntity<?> update(@RequestBody Room room) {
+        roomService.save(room);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Long id) {
-        return roomService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(roomService.delete(id) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }
