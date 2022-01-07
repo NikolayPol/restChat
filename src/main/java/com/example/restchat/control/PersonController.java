@@ -10,10 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,7 +25,7 @@ import java.util.List;
  * Класс PersonController  - контроллер для пользователей
  *
  * @author Nikolay Polegaev
- * @version 1.1 06.01.2022
+ * @version 2.0 07.01.2022
  */
 @RestController
 @RequestMapping("/persons")
@@ -90,5 +93,40 @@ public class PersonController {
             }
         }));
         LOGGER.error(e.getLocalizedMessage());
+    }
+
+    @RequestMapping(value = "", produces = "application/json", method = {RequestMethod.PATCH})
+    public ResponseEntity<Person> patch(@RequestBody Person person)
+            throws InvocationTargetException, IllegalAccessException {
+        Person currentPerson = personService.findById(person.getId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+        );
+
+        var methods = currentPerson.getClass().getDeclaredMethods();
+
+        var namePerMethod = new HashMap<String, Method>();
+
+        for (var method : methods) {
+            var name = method.getName();
+            if (name.startsWith("get") || name.startsWith("set")) {
+                namePerMethod.put(name, method);
+            }
+        }
+
+        for (var name : namePerMethod.keySet()) {
+            if (name.startsWith("get")) {
+                var getMethod = namePerMethod.get(name);
+                var setMethod = namePerMethod.get(name.replace("get", "set"));
+                if (setMethod == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Invalid properties mapping");
+                }
+                var newValue = getMethod.invoke(person);
+                if (newValue != null) {
+                    setMethod.invoke(currentPerson, newValue);
+                }
+            }
+        }
+        return new ResponseEntity<>(personService.save(currentPerson), HttpStatus.OK);
     }
 }
