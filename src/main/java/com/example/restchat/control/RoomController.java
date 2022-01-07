@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.List;
  * Класс RoomController - контроллер для комнат
  *
  * @author Nikolay Polegaev
- * @version 2.0 07.01.2022
+ * @version 2.1 07.01.2022
  */
 @RestController
 @RequestMapping("/rooms")
@@ -40,13 +41,13 @@ public class RoomController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> create(@RequestBody Room room) {
+    public ResponseEntity<?> create(@Valid @RequestBody Room room) {
         roomService.save(room);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping()
-    public ResponseEntity<?> update(@RequestBody Room room) {
+    public ResponseEntity<?> update(@Valid @RequestBody Room room) {
         roomService.save(room);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -57,7 +58,7 @@ public class RoomController {
     }
 
     @RequestMapping(value = "", produces = "application/json", method = {RequestMethod.PATCH})
-    public ResponseEntity<Room> patch(@RequestBody Room room)
+    public ResponseEntity<Room> patch(@Valid @RequestBody Room room)
             throws InvocationTargetException, IllegalAccessException {
         Room currentRoom = roomService.findById(room.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)

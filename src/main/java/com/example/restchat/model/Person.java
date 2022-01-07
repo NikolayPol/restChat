@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
  * Класс Person - модель пользователя
  *
  * @author Nikolay Polegaev
- * @version 1.1 06.01.2022
+ * @version 1.2 07.01.2022
  */
 @Entity
 @Table(name = "person")
@@ -24,10 +26,12 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Field must not be empty")
     private String login;
 
     private String email;
 
+    @NotBlank
     private String password;
 
     @ManyToOne

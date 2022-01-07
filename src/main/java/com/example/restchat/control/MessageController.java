@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.List;
  * Класс MessageController - контроллер для сообщений
  *
  * @author Nikolay Polegaev
- * @version 2.0 07.01.2022
+ * @version 2.1 07.01.2022
  */
 @RestController
 @RequestMapping("/messages")
@@ -40,12 +41,12 @@ public class MessageController {
     }
 
     @PostMapping()
-    public Message create(@RequestBody Message message) {
+    public Message create(@Valid @RequestBody Message message) {
         return messageService.save(message);
     }
 
     @PutMapping()
-    public Message update(@RequestBody Message message) {
+    public Message update(@Valid @RequestBody Message message) {
         return messageService.update(message);
     }
 
@@ -55,7 +56,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = "", produces = "application/json", method = {RequestMethod.PATCH})
-    public ResponseEntity<Message> patch(@RequestBody Message message)
+    public ResponseEntity<Message> patch(@Valid @RequestBody Message message)
             throws InvocationTargetException, IllegalAccessException {
         Message currentMessage = messageService.findById(message.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)

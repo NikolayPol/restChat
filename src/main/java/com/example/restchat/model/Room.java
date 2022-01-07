@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.*;
 
 /**
  * Класс Room - модель комнаты
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.01.2022
+ * @version 1.1 07.01.2022
  */
 @Entity
 @Table(name = "room")
@@ -24,6 +25,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Field must not be empty")
     private String name;
 
     private String description;

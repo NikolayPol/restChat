@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.List;
  * Класс RoleController  - контроллер для ролей
  *
  * @author Nikolay Polegaev
- * @version 2.0 07.01.2022
+ * @version 2.1 07.01.2022
  */
 @RestController
 @RequestMapping("/roles")
@@ -40,12 +41,12 @@ public class RoleController {
     }
 
     @PostMapping()
-    public Role create(@RequestBody Role role) {
+    public Role create(@Valid @RequestBody Role role) {
         return roleService.save(role);
     }
 
     @PutMapping()
-    public Role update(@RequestBody Role role) {
+    public Role update(@Valid @RequestBody Role role) {
         return roleService.save(role);
     }
 
@@ -55,7 +56,7 @@ public class RoleController {
     }
 
     @RequestMapping(value = "", produces = "application/json", method = {RequestMethod.PATCH})
-    public ResponseEntity<Role> patch(@RequestBody Role role)
+    public ResponseEntity<Role> patch(@Valid @RequestBody Role role)
             throws InvocationTargetException, IllegalAccessException {
         Role currentRole = roleService.findById(role.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
  * Класс Message - модель сообщения
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.01.2022
+ * @version 1.1 07.01.2022
  */
 @Entity
 @Table(name = "message")
@@ -25,6 +26,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Field must not be empty")
     private String text;
 
     @ManyToOne

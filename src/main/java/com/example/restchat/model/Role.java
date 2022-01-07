@@ -3,13 +3,14 @@ package com.example.restchat.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 /**
  * Класс Role - модель роли
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.01.2022
+ * @version 1.1 07.01.2022
  */
 @Entity
 @Table(name = "role")
@@ -23,6 +24,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank(message = "Field must not be empty")
     private String name;
 
     @Override

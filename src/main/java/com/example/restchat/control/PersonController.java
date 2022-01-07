@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,7 +26,7 @@ import java.util.List;
  * Класс PersonController  - контроллер для пользователей
  *
  * @author Nikolay Polegaev
- * @version 2.0 07.01.2022
+ * @version 2.1 07.01.2022
  */
 @RestController
 @RequestMapping("/persons")
@@ -52,12 +53,12 @@ public class PersonController {
     }
 
     @PostMapping()
-    public Person create(@RequestBody Person person) {
+    public Person create(@Valid @RequestBody Person person) {
         return personService.save(person);
     }
 
     @PutMapping()
-    public Person update(@RequestBody Person person) {
+    public Person update(@Valid @RequestBody Person person) {
         return personService.save(person);
     }
 
@@ -67,7 +68,7 @@ public class PersonController {
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody Person person) {
+    public void signUp(@Valid @RequestBody Person person) {
         var login = person.getLogin();
         var password = person.getPassword();
         if (login == null || password == null) {
@@ -96,7 +97,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "", produces = "application/json", method = {RequestMethod.PATCH})
-    public ResponseEntity<Person> patch(@RequestBody Person person)
+    public ResponseEntity<Person> patch(@Valid @RequestBody Person person)
             throws InvocationTargetException, IllegalAccessException {
         Person currentPerson = personService.findById(person.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
