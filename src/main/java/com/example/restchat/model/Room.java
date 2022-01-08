@@ -31,16 +31,16 @@ public class Room {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages = new ArrayList<>();
 
     @JsonIgnore
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "person_room",
             joinColumns = @JoinColumn(name = "room_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
-    private List<Person> persons = new ArrayList<>();
+    private Set<Person> persons = new HashSet<>();
 
     public void addPerson(Person author) {
         persons.add(author);

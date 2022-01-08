@@ -5,14 +5,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
  * Класс Person - модель пользователя
  *
  * @author Nikolay Polegaev
- * @version 1.2 07.01.2022
+ * @version 1.3 08.01.2022
  */
 @Entity
 @Table(name = "person")
@@ -42,12 +41,12 @@ public class Person {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages = new ArrayList<>();
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "person_room",
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "room_id"))
-    private List<Room> rooms = new ArrayList<>();
+    private Set<Room> rooms = new HashSet<>();
 
     public Person(String login, String password) {
         this.login = login;
